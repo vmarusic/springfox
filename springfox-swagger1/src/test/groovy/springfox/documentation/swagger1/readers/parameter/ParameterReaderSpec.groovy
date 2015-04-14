@@ -33,38 +33,34 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.swagger.readers.parameter.ParameterAccessReader
 import springfox.documentation.swagger.readers.parameter.ParameterDefaultReader
 import springfox.documentation.swagger.readers.parameter.ParameterDescriptionReader
-import springfox.documentation.swagger.readers.parameter.ParameterNameReader
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
 class ParameterReaderSpec extends DocumentationContextSpec {
-   @Unroll("property #resultProperty expected: #expected")
-   def "should set basic properties based on ApiParam annotation or a sensible default"() {
+  @Unroll("property #resultProperty expected: #expected")
+  def "should set basic properties based on ApiParam annotation or a sensible default"() {
     given:
-      MethodParameter methodParameter = Stub(MethodParameter)
-      methodParameter.getParameterAnnotation(ApiParam.class) >> apiParamAnnotation
-      methodParameter.getParameterAnnotation(RequestParam.class) >> reqParamAnnot
-      methodParameter.getParameterAnnotations() >> [apiParamAnnotation, reqParamAnnot]
-      methodParameter."$springParameterMethod"() >> methodReturnValue
-      def resolvedMethodParameter = Mock(ResolvedMethodParameter)
-      resolvedMethodParameter.methodParameter >> methodParameter
-      def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), genericNamingStrategy)
+    MethodParameter methodParameter = Stub(MethodParameter)
+    methodParameter.getParameterAnnotation(ApiParam.class) >> apiParamAnnotation
+    methodParameter.getParameterAnnotation(RequestParam.class) >> reqParamAnnot
+    methodParameter.getParameterAnnotations() >> [apiParamAnnotation, reqParamAnnot]
+    methodParameter."$springParameterMethod"() >> methodReturnValue
+    def resolvedMethodParameter = Mock(ResolvedMethodParameter)
+    resolvedMethodParameter.methodParameter >> methodParameter
+    def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+    ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), genericNamingStrategy)
     when:
-      parameterPlugin.apply(parameterContext)
+    parameterPlugin.apply(parameterContext)
 
     then:
-      parameterContext.parameterBuilder().build()."$resultProperty" == expected
+    parameterContext.parameterBuilder().build()."$resultProperty" == expected
     where:
-      parameterPlugin                     | resultProperty | springParameterMethod | methodReturnValue | apiParamAnnotation                     | reqParamAnnot                          | expected
-      new ParameterDescriptionReader()    | 'description'  | 'getParameterName'    | 'someName'        | null                                   | null                                   | 'someName'
-      new ParameterDescriptionReader()    | 'description'  | 'none'                | 'any'             | apiParam([value: {-> 'AnDesc' }])      | null                                   | 'AnDesc'
-      swaggerDefaultReader()              | 'defaultValue' | 'none'                | 'any'             | apiParam([defaultValue: {-> 'defl' }]) | null                                   | 'defl'
-      new ParameterAccessReader()         | 'paramAccess'  | 'none'                | 'any'             | apiParam([access: {-> 'myAccess' }])   | null                                   | 'myAccess'
-   }
-
-  ParameterNameReader swaggerParameterNameReader() {
-    return new ParameterNameReader()
+    parameterPlugin                  | resultProperty | springParameterMethod | methodReturnValue | apiParamAnnotation                      | reqParamAnnot | expected
+    new ParameterDescriptionReader() | 'description'  | 'getParameterName'    | 'someName'        | null                                    | null          | 'someName'
+    new ParameterDescriptionReader() | 'description'  | 'none'                | 'any'             | apiParam([value: { -> 'AnDesc' }])      | null          | 'AnDesc'
+    swaggerDefaultReader()           | 'defaultValue' | 'none'                | 'any'             | apiParam([defaultValue: { -> 'defl' }]) | null          | 'defl'
+    new ParameterAccessReader()      | 'paramAccess'  | 'none'                | 'any'             | apiParam([access: { -> 'myAccess' }])   | null          | 'myAccess'
   }
+
 
   ParameterDefaultReader swaggerDefaultReader() {
     new ParameterDefaultReader()
@@ -72,10 +68,10 @@ class ParameterReaderSpec extends DocumentationContextSpec {
 
 
   private ApiParam apiParam(Map closureMap) {
-      closureMap as ApiParam
-   }
+    closureMap as ApiParam
+  }
 
-   private static RequestParam reqParam(Map closureMap) {
-      closureMap as RequestParam
-   }
+  private static RequestParam reqParam(Map closureMap) {
+    closureMap as RequestParam
+  }
 }

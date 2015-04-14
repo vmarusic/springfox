@@ -21,7 +21,6 @@ package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
-import org.springframework.util.StringUtils;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.Parameter;
@@ -150,16 +149,9 @@ public class ParameterBuilder {
     return this;
   }
 
-  //TODO: Whats the rule that needs this to be the case?
-  private String maybeOverrideName(String aName) {
-    if (StringUtils.hasText(this.paramType) && paramType.equals("body")) {
-      return paramType;
-    }
-    return aName;
-  }
 
   public Parameter build() {
-    return new Parameter(maybeOverrideName(name), description, defaultValue, required, allowMultiple,
+    return new Parameter(name, description, defaultValue, required, allowMultiple,
         modelRef, Optional.fromNullable(type), allowableValues, paramType, paramAccess);
   }
 }
