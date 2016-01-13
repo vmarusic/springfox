@@ -17,13 +17,21 @@
  *
  */
 
-package springfox.documentation.spring.web.dummy.controllers;
+package springfox.documentation.schema;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import springfox.documentation.spring.web.dummy.models.Pet;
+import com.google.common.base.Optional;
+import springfox.documentation.service.AllowableValues;
 
-@Controller
-@RequestMapping("/foo")
-public class ConcreteController extends AbstractController<Pet, String> {
+public interface ModelReference {
+  String getType();
+
+  boolean isCollection();
+
+  boolean isMap();
+
+  String getItemType();
+
+  AllowableValues getAllowableValues();
+
+  Optional<ModelReference> itemModel();
 }

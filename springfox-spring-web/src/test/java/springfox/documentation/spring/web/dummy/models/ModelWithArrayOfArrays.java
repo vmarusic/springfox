@@ -16,14 +16,16 @@
  *
  *
  */
+package springfox.documentation.spring.web.dummy.models;
 
-package springfox.documentation.spring.web.dummy.controllers;
+public class ModelWithArrayOfArrays {
+  private int[][] arrayOfArrayOfInts;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import springfox.documentation.spring.web.dummy.models.Pet;
+  public int[][] getArrayOfArrayOfInts() {
+    return arrayOfArrayOfInts;
+  }
 
-@Controller
-@RequestMapping("/foo")
-public class ConcreteController extends AbstractController<Pet, String> {
+  public void setArrayOfArrayOfInts(int[][] arrayOfArrayOfInts) {
+    this.arrayOfArrayOfInts = arrayOfArrayOfInts;
+  }
 }

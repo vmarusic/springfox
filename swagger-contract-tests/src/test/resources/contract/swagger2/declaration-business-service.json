@@ -37,6 +37,7 @@
                     "application/json"
                 ],
                 "produces": [
+                    "application/xml",
                     "*/*",
                     "application/json"
                 ],
@@ -70,6 +71,7 @@
                     "application/json"
                 ],
                 "produces": [
+                    "application/xml",
                     "application/json"
                 ],
                 "parameters": [
@@ -113,6 +115,7 @@
               "application/json"
             ],
             "produces": [
+              "application/xml",
               "application/json"
             ],
             "responses": {
@@ -136,6 +139,7 @@
                     "application/json"
                 ],
                 "produces": [
+                    "application/xml",
                     "*/*",
                     "application/json"
                 ],
@@ -177,6 +181,7 @@
                 ],
                 "produces": [
                     "*/*",
+                    "application/xml",
                     "application/json"
                 ],
                 "parameters": [
@@ -209,6 +214,7 @@
                     "application/json"
                 ],
                 "produces": [
+                    "application/xml",
                     "application/json"
                 ],
                 "parameters": [
@@ -218,7 +224,11 @@
                         "description": "business",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "enum": [
+                              "PRODUCT",
+                              "SERVICE"
+                            ]
                         }
                     }
                 ],
@@ -226,7 +236,11 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "enum": [
+                              "PRODUCT",
+                              "SERVICE"
+                            ]
                         }
                     }
                 }
@@ -244,6 +258,7 @@
                 ],
                 "produces": [
                     "*/*",
+                    "application/xml",
                     "application/json"
                 ],
                 "parameters": [

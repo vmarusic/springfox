@@ -37,7 +37,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                  "application/xml",
+                  "application/json",
                 ],
                 "parameters": [
                     {
@@ -57,7 +58,7 @@
                 }
             }
         },
-        "/foo/get-t": {
+        "/foo/get-t/{id}": {
             "get": {
                 "tags": [
                     "concrete-controller"
@@ -68,7 +69,17 @@
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                  "application/xml",
+                  "application/json"
+                ],
+                "parameters": [
+                  {
+                    "in": "path",
+                    "name": "id",
+                    "description": "id",
+                    "required": true,
+                    "type": "string"
+                  }
                 ],
                 "responses": {
                     "405": {

@@ -22,6 +22,8 @@ package springfox.documentation.swagger2.mappers;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Ordering;
+import com.google.common.primitives.Ints;
+import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.BooleanProperty;
 import io.swagger.models.properties.DateProperty;
 import io.swagger.models.properties.DateTimeProperty;
@@ -37,6 +39,7 @@ import io.swagger.models.properties.RefProperty;
 import io.swagger.models.properties.StringProperty;
 import io.swagger.models.properties.UUIDProperty;
 import springfox.documentation.schema.ModelProperty;
+import springfox.documentation.schema.ModelReference;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -74,6 +77,13 @@ class Properties {
     return propertyLookup.apply(safeTypeName.toLowerCase()).apply(safeTypeName);
   }
 
+  public static Property itemTypeProperty(ModelReference paramModel) {
+    if (paramModel.isCollection()) {
+      return new ArrayProperty(itemTypeProperty(paramModel.itemModel().get()));
+    }
+    return property(paramModel.getType());
+  }
+
   private static <T extends Property> Function<String, T> newInstanceOf(final Class<T> clazz) {
     return new Function<String, T>() {
       @Override
@@ -86,6 +96,10 @@ class Properties {
         }
       }
     };
+  }
+
+  public static Ordering<String> defaultOrdering(Map<String, ModelProperty> properties) {
+    return Ordering.from(byPosition(properties)).compound(byName());
   }
 
   private static Function<String, ? extends Property> voidOrRef(final String typeName) {
@@ -120,10 +134,6 @@ class Properties {
     };
   }
 
-  public static Ordering<String> defaultOrdering(Map<String, ModelProperty> properties) {
-    return Ordering.from(byPosition(properties)).compound(byName());
-  }
-
   private static Comparator<String> byName() {
     return new Comparator<String>() {
       @Override
@@ -139,7 +149,7 @@ class Properties {
       public int compare(String first, String second) {
         ModelProperty p1 = modelProperties.get(first);
         ModelProperty p2 = modelProperties.get(second);
-        return Integer.compare(p1.getPosition(), p2.getPosition());
+        return Ints.compare(p1.getPosition(), p2.getPosition());
       }
     };
   }
